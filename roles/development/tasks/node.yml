@@ -1,0 +1,4 @@
+---
+- name: install nodejs
+  become: yes
+  apt: update_cache=yes name=nodejs-legacy state=present

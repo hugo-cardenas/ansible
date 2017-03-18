@@ -1,0 +1,17 @@
+---
+- name: install npm
+  become: yes
+  apt: update_cache=yes name=npm state=latest
+
+- name: install npm packages
+  become: yes
+  npm: global=yes name={{ item }} state=present
+  with_items:
+   - eslint
+   - faucet
+   - n
+   - tape
+
+- name: update nodejs with n command
+  become: yes
+  command: n latest

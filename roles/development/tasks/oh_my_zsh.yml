@@ -1,0 +1,19 @@
+---
+- name: install zsh
+  become: yes
+  apt: update_cache=yes name=zsh state=present
+  
+- name: set zsh as default shell
+  become: yes
+  user: name=vagrant shell=/bin/zsh # TODO Extract user name to argument
+
+- name: clone oh-my-zsh repository
+  git: repo=git://github.com/robbyrussell/oh-my-zsh.git dest=/home/vagrant/.oh-my-zsh # TODO Extract user
+
+- name: set zsh config
+  copy:
+    src: "{{ role_path }}/files/.zshrc"
+    dest: /home/vagrant/.zshrc # TODO User
+    owner: vagrant
+    group: vagrant
+    mode: 0644

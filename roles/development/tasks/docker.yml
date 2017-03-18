@@ -1,0 +1,50 @@
+---
+- name: get kernel info
+  command: uname -r
+  register: uname_result
+
+- name: install Docker needed apt packages
+  become: yes
+  apt: update_cache=yes name={{ item }} state=present
+  with_items:
+   - apt-transport-https
+   - ca-certificates
+   - curl
+   - linux-image-extra-{{ uname_result.stdout }}
+   - linux-image-extra-virtual
+   - software-properties-common
+
+- name: add Docker GPG key
+  become: yes
+  apt_key:
+    id: 58118E89F3A912897C070ADBF76221572C52609D
+    url: https://apt.dockerproject.org/gpg
+    state: present
+
+- name: get distribution name
+  command: lsb_release -cs
+  register: distribution_name
+
+- name: add Docker repository
+  become: yes
+  apt_repository:
+    repo: deb https://apt.dockerproject.org/repo/ ubuntu-{{ distribution_name.stdout }} main
+    state: present
+
+- name: install Docker
+  become: yes
+  apt: update_cache=yes name=docker-engine state=present
+
+- name: create Docker group
+  group:
+    name: docker
+    state: present
+
+- name: add user to Docker group
+  become: yes
+  user:
+    name: vagrant # TODO Extract to param
+    state: present
+    append: yes
+    groups: docker
+
