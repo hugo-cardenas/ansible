@@ -28,5 +28,5 @@
     ports:
       - "80:80"
     restart: yes
-    restart_policy: on-failure
+    restart_policy: unless-stopped
     state: started
