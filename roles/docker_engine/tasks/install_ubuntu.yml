@@ -1,4 +1,6 @@
 ---
+# Install Docker engine specifically for Ubuntu
+
 - name: get kernel info
   command: uname -r
   register: uname_result
@@ -34,17 +36,3 @@
 - name: install Docker
   become: yes
   apt: update_cache=yes name=docker-engine state=present
-
-- name: create Docker group
-  group:
-    name: docker
-    state: present
-
-- name: add user to Docker group
-  become: yes
-  user:
-    name: vagrant # TODO Extract to param
-    state: present
-    append: yes
-    groups: docker
-

@@ -1,0 +1,6 @@
+---
+- hosts: raspberrypi.local
+  roles:
+    - {role: docker_engine, docker_user: pi}
+    - nginx_docker
+

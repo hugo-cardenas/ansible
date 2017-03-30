@@ -1,0 +1,32 @@
+---
+- name: install python-pip
+  become: yes
+  apt: update_cache=yes name=python-pip state=present
+
+- name: upgrade pip
+  pip:
+    extra_args: --user
+    name: pip
+    state: present
+    version: 9.0.1
+
+- name: install python module docker-py
+  pip: 
+    extra_args: --user
+    name: docker-py
+    state: present
+    version: 1.10.6
+
+- name: pull nginx image
+  docker_image:
+    name: nginx:1.11
+
+- name: run nginx container
+  docker_container:
+    image: nginx:1.11
+    name: nginx
+    ports:
+      - "80:80"
+    restart: yes
+    restart_policy: on-failure
+    state: started

@@ -1,7 +1,6 @@
 ---
 - include: apt.yml
 - include: awscli.yml
-- include: docker.yml
 - include: oh_my_zsh.yml
 - include: node.yml
 - include: npm.yml

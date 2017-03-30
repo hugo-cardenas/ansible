@@ -2,3 +2,6 @@
 - hosts: all
   roles:
     - development
+    - docker_engine
+  vars:
+    docker_user: vagrant

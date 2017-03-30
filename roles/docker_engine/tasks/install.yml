@@ -1,0 +1,9 @@
+---
+
+# Ubuntu-specific installation
+- include: install_ubuntu.yml
+  when: ansible_distribution == "Ubuntu"
+
+# Otherwise, use install script
+- include: install_script.yml
+  when: ansible_distribution != "Ubuntu"

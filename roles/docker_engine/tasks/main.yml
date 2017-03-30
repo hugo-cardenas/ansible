@@ -1,0 +1,30 @@
+---
+
+- name: get Docker client version
+  become: yes
+  command: docker version --format "{{ '{{' }}.Client.Version{{ '}}' }}"
+  register: docker_client_version
+
+- name: get Docker server version
+  become: yes
+  command: docker version --format "{{ '{{' }}.Server.Version{{ '}}' }}"
+  register: docker_server_version
+
+# Install only if version lower than minimum required
+- include: install.yml
+  when: docker_client_version | version_compare(docker_min_version, '<') or
+        docker_server_version | version_compare(docker_min_version, '<')
+
+- name: create Docker group
+  group:
+    name: docker
+    state: present
+
+- name: add user to Docker group
+  become: yes
+  user:
+    name: "{{ docker_user }}"
+    state: present
+    append: yes
+    groups: docker
+
