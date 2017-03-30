@@ -19,11 +19,11 @@
 
 - name: pull nginx image
   docker_image:
-    name: nginx:1.11
+    name: akkerman/rpi-nginx:1.6.2
 
 - name: run nginx container
   docker_container:
-    image: nginx:1.11
+    image: akkerman/rpi-nginx:1.6.2
     name: nginx
     ports:
       - "80:80"
