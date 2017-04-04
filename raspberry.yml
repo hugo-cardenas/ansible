@@ -2,5 +2,5 @@
 - hosts: raspberrypi.local
   roles:
     - {role: docker_engine, docker_user: pi}
+    - nfs_server_raspberry
     - nginx_docker
-

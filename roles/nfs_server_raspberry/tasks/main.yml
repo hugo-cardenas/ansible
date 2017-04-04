@@ -1,0 +1,34 @@
+---
+- name: install apt packages
+  become: yes
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+   - nfs-kernel-server
+   - ntfs-3g
+   - rpcbind
+
+- name: clean nfs configuration
+  become: yes
+  lineinfile:
+    dest: /etc/exports
+    regexp: "/media/pi/WD"
+    state: absent
+
+- name: set nfs configuration
+  become: yes
+  lineinfile:
+    dest: /etc/exports
+    line: "/media/pi/WD 192.168.1.0/24(rw,sync,no_subtree_check,all_squash,anonuid=1000,anongid=1000)"
+    state: present
+
+- name: restart services rpcbind and nfs server
+  become: yes
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+   - rpcbind
+   - nfs-kernel-server
