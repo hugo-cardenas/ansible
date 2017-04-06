@@ -1,0 +1,28 @@
+---
+# Install Docker compose specifically for Ubuntu
+
+- name: get system kernel name
+  command: uname -s
+  register: uname_kernel
+
+- name: get system machine name
+  command: uname -m
+  register: uname_machine
+
+- name: print Docker compose executable url
+  debug:
+    msg: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ uname_kernel.stdout }}-{{ uname_machine.stdout }}"
+    verbosity: 1
+
+- name: download Docker compose executable
+  become: yes
+  get_url: 
+    url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ uname_kernel.stdout }}-{{ uname_machine.stdout }}"
+    dest: /usr/local/bin/docker-compose
+    force: yes
+
+- name: set correct permissions to Docker compose executable
+  become: yes
+  file:
+    path: /usr/local/bin/docker-compose
+    mode: "a+x"

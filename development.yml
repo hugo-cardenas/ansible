@@ -3,5 +3,6 @@
   roles:
     - development
     - docker_engine
+    - docker_compose
   vars:
     docker_user: vagrant
