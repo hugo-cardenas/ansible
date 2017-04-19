@@ -6,4 +6,5 @@
    - curl
    - ntp
    - git
+   - redis-tools
    - vim
