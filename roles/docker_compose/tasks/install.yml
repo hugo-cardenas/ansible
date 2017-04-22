@@ -1,9 +1,18 @@
 ---
 
+- name: print linux distribution
+  debug:
+    var: ansible_distribution
+    verbosity: 1
+
 # Ubuntu-specific installation
 - include: install_ubuntu.yml
   when: ansible_distribution == "Ubuntu"
 
-# Otherwise, use install script - TODO
-#- include: install_script.yml
-#  when: ansible_distribution != "Ubuntu"
+- name: get os-release info
+  command: cat /etc/os-release
+  register: os_release
+
+# Raspbian-specific installation
+- include: install_raspbian.yml
+  when: "'ID=raspbian' in os_release.stdout"

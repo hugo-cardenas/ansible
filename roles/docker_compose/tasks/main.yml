@@ -12,4 +12,5 @@
 
 # Install only if not installed or current version different from the required one
 - include: install.yml
-  when: docker_compose_current_version.stdout | version_compare(docker_compose_version, '!=')
+  when: (docker_compose_current_version.stdout is undefined) or
+        docker_compose_current_version.stdout | version_compare(docker_compose_version, '!=')

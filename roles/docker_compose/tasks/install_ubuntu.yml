@@ -1,5 +1,4 @@
 ---
-# Install Docker compose specifically for Ubuntu
 
 - name: get system kernel name
   command: uname -s
