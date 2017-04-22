@@ -1,5 +1,28 @@
 ---
+# https://github.com/hypriot/arm-compose
 
-- name: DEBUG
-  debug:
-    msg: "GOT IN"
+# - name: install apt packages
+#   become: yes
+#   apt: 
+#     name: apt-transport-https
+#     state: present
+#     update_cache: yes
+
+- name: add Hypriot repo
+  become: yes
+  lineinfile:
+    create: yes
+    line: 'deb https://packagecloud.io/Hypriot/Schatzkiste/debian/ jessie main'
+    path: /etc/apt/sources.list.d/hypriot.list
+
+- name: add Hypriot key
+  become: yes
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 37BBEE3F7AD95B3F
+
+- name: install docker-compose
+  become: yes
+  apt: 
+    name: "docker-compose={{ docker_compose_version_raspbian }}"
+    state: present

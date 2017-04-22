@@ -1,5 +1,4 @@
 ---
-
 - name: print linux distribution
   debug:
     var: ansible_distribution

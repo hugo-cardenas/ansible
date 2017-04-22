@@ -1,5 +1,4 @@
 ---
-
 - name: get system kernel name
   command: uname -s
   register: uname_kernel

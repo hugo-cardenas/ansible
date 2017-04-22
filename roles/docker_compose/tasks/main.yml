@@ -1,5 +1,4 @@
 ---
-
 - name: get Docker compose version
   command: docker-compose version --short
   register: docker_compose_current_version
@@ -10,6 +9,7 @@
     var: docker_compose_current_version.stdout
     verbosity: 1
 
+# TODO Fix to require different versions depending on linux distro
 # Install only if not installed or current version different from the required one
 - include: install.yml
   when: (docker_compose_current_version.stdout is undefined) or
