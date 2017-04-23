@@ -1,0 +1,4 @@
+---
+- hosts: 192.168.1.101
+  roles:
+    - video_backupper_docker_build

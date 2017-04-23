@@ -1,0 +1,26 @@
+version: "2"
+
+services:
+  app:
+    command: bin/runWorker
+    image: hugo-cardenas/video-backupper-node-rpi:1.0.0
+    networks:
+      - common
+    restart: on-failure
+    volumes:
+      - "/usr/local/src/video-backupper/config/production.config.json:/usr/local/src/video-backupper/config/config.json"
+      - "/usr/local/src/video-backupper/config/youtube.pem:/usr/local/src/video-backupper/config/youtube.pem"
+  
+  redis:
+    image: hypriot/rpi-redis:3.0.4
+    networks:
+      - common
+    restart: on-failure
+    volumes:
+      - redis:/data
+
+networks:
+  common:
+
+volumes:
+  redis:

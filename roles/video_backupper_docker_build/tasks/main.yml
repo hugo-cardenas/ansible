@@ -4,11 +4,13 @@
   git:
     repo: "https://github.com/hugo-cardenas/video-backupper"
     dest: "{{ ansible_env.HOME }}/video-backupper"
-    version: docker_setup
+    update: yes
+    version: master
 
 - name: build video-backupper Docker image for raspberry pi
   docker_image:
     dockerfile: "{{ ansible_env.HOME }}/video-backupper/docker/build/rpi/Dockerfile"
+    force: yes
     name: hugo-cardenas/video-backupper-node-rpi:1.0.0    
     path: "{{ ansible_env.HOME }}/video-backupper"
     #push: yes

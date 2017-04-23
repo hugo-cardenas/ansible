@@ -1,0 +1,20 @@
+---
+- name: create target directory
+  become: yes
+  file: 
+    path: "{{ project_dir }}/docker"
+    state: directory 
+    mode: 0755
+
+- name: copy compose file
+  become: yes
+  copy:
+    src: compose.raspberry.yml
+    dest: "{{ project_dir }}/docker/compose.raspberry.yml"
+    force: yes
+
+- name: run docker compose
+  docker_service:
+    project_src: "{{ project_dir }}/docker"
+    files: 
+      - compose.raspberry.yml
