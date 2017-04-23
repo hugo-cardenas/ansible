@@ -9,13 +9,13 @@
 
 - name: print Docker compose executable url
   debug:
-    msg: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ uname_kernel.stdout }}-{{ uname_machine.stdout }}"
+    msg: "https://github.com/docker/compose/releases/download/{{ docker_compose_required_version }}/docker-compose-{{ uname_kernel.stdout }}-{{ uname_machine.stdout }}"
     verbosity: 1
 
 - name: download Docker compose executable
   become: yes
   get_url: 
-    url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ uname_kernel.stdout }}-{{ uname_machine.stdout }}"
+    url: "https://github.com/docker/compose/releases/download/{{ docker_compose_required_version }}/docker-compose-{{ uname_kernel.stdout }}-{{ uname_machine.stdout }}"
     dest: /usr/local/bin/docker-compose
     force: yes
 

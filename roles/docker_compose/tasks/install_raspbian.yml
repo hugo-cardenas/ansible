@@ -1,28 +1,16 @@
 ---
-# https://github.com/hypriot/arm-compose
+# http://blog.alexellis.io/get-started-with-docker-on-64-bit-arm/
 
-# - name: install apt packages
-#   become: yes
-#   apt: 
-#     name: apt-transport-https
-#     state: present
-#     update_cache: yes
-
-- name: add Hypriot repo
+- name: install python-pip
   become: yes
-  lineinfile:
-    create: yes
-    line: 'deb https://packagecloud.io/Hypriot/Schatzkiste/debian/ jessie main'
-    path: /etc/apt/sources.list.d/hypriot.list
-
-- name: add Hypriot key
-  become: yes
-  apt_key:
-    keyserver: keyserver.ubuntu.com
-    id: 37BBEE3F7AD95B3F
+  apt: 
+    name: python-pip 
+    state: present
+    update_cache: yes 
 
 - name: install docker-compose
   become: yes
-  apt: 
-    name: "docker-compose={{ docker_compose_version_raspbian }}"
+  pip: 
+    name: docker-compose
     state: present
+    version: "{{ docker_compose_required_version }}"

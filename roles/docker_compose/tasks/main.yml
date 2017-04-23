@@ -1,4 +1,7 @@
 ---
+
+# Determine current docker-compose version (if existing)
+
 - name: get Docker compose version
   command: docker-compose version --short
   register: docker_compose_current_version
@@ -6,11 +9,46 @@
 
 - name: print current Docker compose version
   debug: 
-    var: docker_compose_current_version.stdout
+    var: docker_compose_current_version.stdout | default('not installed')
     verbosity: 1
 
-# TODO Fix to require different versions depending on linux distro
-# Install only if not installed or current version different from the required one
-- include: install.yml
-  when: (docker_compose_current_version.stdout is undefined) or
-        docker_compose_current_version.stdout | version_compare(docker_compose_version, '!=')
+# Determine Linux distribution
+
+- name: print linux distribution
+  debug:
+    var: ansible_distribution
+    verbosity: 1
+
+- name: get os-release info
+  command: cat /etc/os-release
+  register: os_release
+
+- name: determine if ubuntu
+  set_fact:
+    distribution: "ubuntu"
+  when: ansible_distribution == "Ubuntu"
+
+- name: determine if raspbian
+  set_fact:
+    distribution: "raspbian"
+  when: "'ID=raspbian' in os_release.stdout"
+
+- name: get required version
+  set_fact:
+    docker_compose_required_version: "{{ docker_compose[distribution].required_version }}"
+
+- name: print required version
+  debug:
+    var: docker_compose_required_version
+    verbosity: 1
+
+# Install required version if needed
+
+- name: determine if requires installation
+  set_fact:
+    requires_install: (docker_compose_current_version.stdout is undefined) or
+        docker_compose_current_version.stdout | version_compare(docker_compose_required_version, '!=')
+
+- name: run the corresponding installation task
+  include: "{{ docker_compose[distribution].task_file }}"
+  when: requires_install

@@ -1,6 +1,6 @@
 ---
-- hosts: raspberrypi.local
+- hosts: 192.168.1.101
   roles:
     - {role: docker_engine, docker_user: pi}
+    - docker_compose
     - nfs_server_raspberry
-    - nginx_docker
