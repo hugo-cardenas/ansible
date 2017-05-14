@@ -4,5 +4,6 @@
     - development
     - docker_engine
     - docker_compose
+    - {role: python, virtual_env_user: vagrant, virtual_env_project_dir: /workspace/projects}
   vars:
     docker_user: vagrant
