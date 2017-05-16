@@ -6,3 +6,9 @@
   pip: 
     requirements: "{{ project_dir }}/requirements.txt"
     virtualenv: "{{ virtualenv_dir }}"
+
+- name: install gunicorn
+  pip: 
+    name: gunicorn
+    version: 19.7.*
+    virtualenv: "{{ virtualenv_dir }}"
