@@ -1,0 +1,8 @@
+---
+- name: create JazzRoutine python virtualenv
+  command: "virtualenv -p /usr/bin/python3 {{ virtualenv_dir }}"
+
+- name: install project python requirements
+  pip: 
+    requirements: "{{ project_dir }}/requirements.txt"
+    virtualenv: "{{ virtualenv_dir }}"

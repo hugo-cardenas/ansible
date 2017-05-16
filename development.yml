@@ -2,8 +2,7 @@
 - hosts: all
   roles:
     - development
-    - docker_engine
+    - {role: docker_engine, docker_user: vagrant}
     - docker_compose
-    - {role: python, virtual_env_user: vagrant, virtual_env_project_dir: /workspace/projects}
-  vars:
-    docker_user: vagrant
+    - {role: python, virtual_env_user: vagrant}
+    - {role: jazz_routine, project_dir: /workspace/projects/JazzRoutine, virtualenv_dir: /home/vagrant/.virtualenvs/JazzRoutine}

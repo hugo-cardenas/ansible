@@ -1,3 +1,0 @@
-shell_profile_files:
-  "/bin/zsh": ".zprofile"
-  "/bin/bash": ".profile"
