@@ -1,5 +1,5 @@
 ---
-- name: create JazzRoutine python virtualenv
+- name: create jazzroutine virtualenv
   command: "virtualenv -p /usr/bin/python3 {{ virtualenv_dir }}"
 
 - name: install project python requirements
@@ -12,3 +12,28 @@
     name: gunicorn
     version: 19.7.*
     virtualenv: "{{ virtualenv_dir }}"
+
+- name: launch database from docker-compose 
+  shell: "docker-compose -f {{ project_dir }}/docker/compose.dev.yml up -d" # TODO Use proper module
+
+- name: copy nginx jazzroutine config
+  become: yes
+  copy:
+    src: jazzroutine.conf
+    dest: /etc/nginx/sites-available/jazzroutine.conf
+    force: yes
+
+- name: enable nginx jazzroutine config
+  become: yes
+  file:
+    src: /etc/nginx/sites-available/jazzroutine.conf
+    path: /etc/nginx/sites-enabled/jazzroutine.conf
+    state: link
+
+# TODO Reload Gunicorn
+# JAZZROUTINE_ENV=development gunicorn --workers=2 --log-file=/tmp/gunicorn.log runserver:app &
+
+- name: reload nginx
+  service: 
+    name: nginx 
+    state: reloaded

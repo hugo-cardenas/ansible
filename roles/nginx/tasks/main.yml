@@ -1,2 +1,18 @@
 ---
-- include: nginx.yml
+- name: install nginx package
+  become: yes
+  apt: 
+    name: nginx=1.4.* 
+    update_cache: yes    
+    state: present
+
+- name: disable default config
+  become: yes
+  file:
+    name: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: start nginx service
+  service: 
+    name: nginx 
+    state: started
