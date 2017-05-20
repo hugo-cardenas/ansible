@@ -13,13 +13,20 @@
     version: 19.7.*
     virtualenv: "{{ virtualenv_dir }}"
 
+- name: copy gunicorn upstart config
+  become: yes
+  template:
+    src: upstart/gunicorn-jazzroutine.conf
+    dest: /etc/init/gunicorn-jazzroutine.conf
+    force: yes
+
 - name: launch database from docker-compose 
   shell: "docker-compose -f {{ project_dir }}/docker/compose.dev.yml up -d" # TODO Use proper module
 
 - name: copy nginx jazzroutine config
   become: yes
   copy:
-    src: jazzroutine.conf
+    src: nginx/jazzroutine.conf
     dest: /etc/nginx/sites-available/jazzroutine.conf
     force: yes
 
@@ -30,10 +37,28 @@
     path: /etc/nginx/sites-enabled/jazzroutine.conf
     state: link
 
-# TODO Reload Gunicorn
-# JAZZROUTINE_ENV=development gunicorn --workers=2 --log-file=/tmp/gunicorn.log runserver:app &
+- name: create nginx ssl directory
+  become: yes
+  file:
+    path: /etc/nginx/ssl
+    state: directory
 
-- name: reload nginx
+- name: create self signed SSL certificate
+  become: yes
+  command: >
+    openssl req -x509 -nodes -days 365 
+    -newkey rsa:2048 
+    -keyout /etc/nginx/ssl/nginx.key 
+    -out /etc/nginx/ssl/nginx.crt
+    -subj "/C=US/ST=foo/L=bar/O=baz/CN=www.foo.com"
+
+- name: restart gunicorn
+  become: yes
+  service:
+    name: gunicorn-jazzroutine
+    state: restarted
+
+- name: restart nginx
   service: 
     name: nginx 
-    state: reloaded
+    state: restarted
